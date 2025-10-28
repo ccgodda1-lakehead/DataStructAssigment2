@@ -4,7 +4,6 @@
 using std::string;
 using std::ostream;
 
-
 template <class T>
 class DLList;
 
@@ -59,6 +58,8 @@ public:
 
     bool contains(const T& val) const;
     DLList& operator=(DLList other);
+    
+
 
 private:
     DLLNode<T>* head;
@@ -263,8 +264,8 @@ void DLList<T>::append(const DLList& other)
 template <class T>
 DLList<T>& DLList<T>::operator=(DLList<T> other)
 {
-    swap(head, other.head);
-    swap(tail, other.tail);
+    std::swap(head, other.head);
+    std::swap(tail, other.tail);
 
     return *this;
 }
@@ -283,4 +284,68 @@ ostream& operator<<(ostream& out, const DLList<T>& list) {
     out << "]";
 
     return out;
+}
+
+
+//non memeber functions
+template<class T>
+int replaceVal(DLList<T>& list, T f, T r) {
+
+    
+    DLLNode<T>* curr;
+    DLList<T> newList;
+    int count = 0;
+
+    for (curr = list.head_node(); curr != nullptr; curr = curr->get_next()) {
+        if (curr->get_val() == f) {
+
+
+            /*
+            need to set the curr node to the newnode via a replace, since it is a non memeber
+            function it can not do that directly....
+
+            add a replace function? could work but also idk if that's what teach is expecting
+            set the pointer of curr to new node, tried didn't work I may just be dumb and doign it wrong
+
+            maybe like.. remove curr from the DLLlist and add new, it would techincally work
+            but it wouldn't really add at the same place..
+
+            can create a whole other copy of the DLL and start copying it over but when you reach a curr
+            you do an r instead.
+
+
+            dont need this anymore
+            DLLNode<T> newNode(r, curr->get_next(), curr->get_prev());
+
+            */
+            newList.add_to_tail(r);
+            
+            count++;
+
+        }
+        else {
+            newList.add_to_tail(curr->get_val());
+        }
+    }
+
+    list = newList;
+
+    return count;
+}
+
+
+//I used this method to create a random mainDll list for testing
+template <class T>
+void DllListFillRandomInt(DLList<T>& list) {
+
+    //makes it truely random
+    srand(time(0));
+
+    //adding ran varaibles to tail
+    for (int i = 0; i <= 10; i++) {
+        list.add_to_tail(rand() % 6);
+    }
+
+    //adding ones to make sure certain test functions run
+    list.add_to_head(0);
 }
