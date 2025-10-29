@@ -63,6 +63,8 @@ public:
     DLList rmv_ret_negative();
     void RemoveAllDuplicatesOf(T& x);
     DLLNode<T>* get_at(int index);
+    bool insert_before(int index, T& x);
+
 
     int getSize() const;
 
@@ -473,6 +475,62 @@ int DLList<T>::getSize() const{
     }
 
     return count;
+}
+
+template<class T>
+bool DLList<T>::insert_before(int index, T& x) {
+
+    DLLNode<T>* beforeNode = this->get_at(index);
+
+    if (is_empty()){
+        //can add before a variable if non of them exisist
+        return false;
+
+    }
+      
+
+    if (index == 0) {
+        this->add_to_head(x);
+
+        return true;
+    }
+    else {
+        /*
+         1 <-> 2 <-> 3
+         to 
+         1 <-> new <-> 2 <-> 3
+
+         if beforeNode is two
+
+         new.prev = 2.prev
+
+         new.next = 2
+         
+         1.next = new
+
+         2.prev = new
+
+
+
+        */
+
+        // 1 <- new -> 2 
+        //const is (val, ->, <-), or (val, next, prev)
+        DLLNode<T>* new_node = new DLLNode<T>(x, beforeNode, beforeNode->get_prev());
+
+        DLLNode<T>* beforebeforeNode = beforeNode->prev;
+
+        // 1 -> new
+        beforebeforeNode->next = new_node;
+
+        // new <- 2
+        beforeNode->prev = new_node;
+
+       
+
+        return true;
+    }
+
 }
 
 //non memeber functions

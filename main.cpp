@@ -42,7 +42,11 @@ int main() {
 
 	int ranIndex = rand() % mainDLL.getSize();
 
-	cout << "getting variable at index " << ranIndex << ": [" << mainDLL.get_at(ranIndex)->get_val() << "]";
+	cout << "getting variable at index " << ranIndex << ": [" << mainDLL.get_at(ranIndex)->get_val() << "]" << endl;
 
+	int value = 200;
 
+	mainDLL.insert_before(ranIndex, value);
+
+	cout << "Inserting before that index: " << mainDLL << endl;
 }
