@@ -295,6 +295,25 @@ DLList<T> DLList<T>::rmv_ret_negative() {
     /*
     * Similar to replaceVal, create another list. look through list, if curr < 0
     * put it in neg array and delete.
+    * 
+    * 
+    * Errors
+    * 
+    * for some reason removing the tail does not work
+    * so if the last one in the list is a negative it will fail
+    * 
+    * also if used with the replace value thing it also fails
+    * 
+    * (Exception thrown: read access violation.
+        pred was 0xFFFFFFFFFFFFFFF71), line 338
+    * 
+    * Similar error to last one, since I orginally set it up to always have the head be
+    * 0 which is then replaced with a neg.. head will always be negative 1
+    * 
+    * so the replacing head, and tail methods don't work...
+    * 
+    * it's trying to remove it twice because I forgot to add the movement into the head/tail removal
+    * 
     */
 
     DLLNode<T>* curr = head;
@@ -303,23 +322,37 @@ DLList<T> DLList<T>::rmv_ret_negative() {
     while (curr != nullptr) {
         if (curr->val < 0) {
 
-            std::cout << "removed" << std::endl;
-
             negList.add_to_tail(curr->val);
 
             bool Changed = false;;
 
             if (curr == head) {
+                //std::cout << "removed head" << std::endl;
+
+                DLLNode<T>* newCurr = curr->get_next();
+
                 remove_head();
+
+                curr = newCurr;
                 Changed = true;
             }
 
             if (curr == tail) {
+                //std::cout << "removed tail" << std::endl;
+
+                DLLNode<T>* newCurr = curr->get_next();
+
                 remove_tail();
+
+                curr = newCurr;
+
                 Changed = true;
             }
 
             if (Changed == false) {
+                //std::cout << "removed middle" << std::endl;
+
+
                 DLLNode<T>* pred = curr->prev;
                 DLLNode<T>* succ = curr->next;
                 pred->next = succ;
@@ -406,4 +439,7 @@ void DllListFillRandomInt(DLList<T>& list) {
 
     //adding ones to make sure certain test functions run
     list.add_to_head(0);
+
+    //for testing purposes
+    //list.add_to_tail(-1);
 }

@@ -23,7 +23,7 @@ int main() {
 
 	cout << "Starting List: " << mainDLL << endl;
 
-	//cout << "Amount of 0 changed to -1: " << replaceVal(mainDLL, 0, -1) << endl;
+	cout << "Amount of 0 changed to -1: " << replaceVal(mainDLL, 0, -1) << endl;
 
 	cout << "Changed List: " << mainDLL << endl;
 
