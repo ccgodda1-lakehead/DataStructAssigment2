@@ -23,8 +23,12 @@ int main() {
 
 	cout << "Starting List: " << mainDLL << endl;
 
-	cout << "Amount of 0 changed to 20: " << replaceVal(mainDLL, 0, 20) << endl;
+	//cout << "Amount of 0 changed to -1: " << replaceVal(mainDLL, 0, -1) << endl;
 
-	cout << "Changed List: " << mainDLL;
+	cout << "Changed List: " << mainDLL << endl;
+
+	cout << "Removed Negatives: " << mainDLL.rmv_ret_negative() << endl;
+
+	cout << "Changed List: " << mainDLL << endl;
 
 }

@@ -59,7 +59,8 @@ public:
     bool contains(const T& val) const;
     DLList& operator=(DLList other);
     
-
+    //added methods
+    DLList rmv_ret_negative();
 
 private:
     DLLNode<T>* head;
@@ -287,6 +288,63 @@ ostream& operator<<(ostream& out, const DLList<T>& list) {
 }
 
 
+//memeber functions
+template <class T>
+DLList<T> DLList<T>::rmv_ret_negative() {
+
+    /*
+    * Similar to replaceVal, create another list. look through list, if curr < 0
+    * put it in neg array and delete.
+    */
+
+    DLLNode<T>* curr = head;
+    DLList<T> negList;
+
+    while (curr != nullptr) {
+        if (curr->val < 0) {
+
+            std::cout << "removed" << std::endl;
+
+            negList.add_to_tail(curr->val);
+
+            bool Changed = false;;
+
+            if (curr == head) {
+                remove_head();
+                Changed = true;
+            }
+
+            if (curr == tail) {
+                remove_tail();
+                Changed = true;
+            }
+
+            if (Changed == false) {
+                DLLNode<T>* pred = curr->prev;
+                DLLNode<T>* succ = curr->next;
+                pred->next = succ;
+                succ->prev = pred;
+
+                DLLNode<T>* newCurr = curr->get_next();
+
+                delete curr;
+
+                curr = newCurr;
+            }
+
+        }
+        else {
+            std::cout << "not Removed" << std::endl;
+
+
+            curr = curr->get_next();
+        }
+    }
+
+    return negList;
+
+}
+
 //non memeber functions
 template<class T>
 int replaceVal(DLList<T>& list, T f, T r) {
@@ -343,7 +401,7 @@ void DllListFillRandomInt(DLList<T>& list) {
 
     //adding ran varaibles to tail
     for (int i = 0; i <= 10; i++) {
-        list.add_to_tail(rand() % 6);
+        list.add_to_tail((rand() % 10)- 3);
     }
 
     //adding ones to make sure certain test functions run
