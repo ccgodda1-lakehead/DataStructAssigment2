@@ -62,6 +62,9 @@ public:
     //added methods
     DLList rmv_ret_negative();
     void RemoveAllDuplicatesOf(T& x);
+    DLLNode<T>* get_at(int index);
+
+    int getSize() const;
 
 private:
     DLLNode<T>* head;
@@ -446,6 +449,32 @@ void DLList <T>::RemoveAllDuplicatesOf(T& x) {
 
 }
 
+template<class T>
+DLLNode<T>* DLList<T>::get_at(int index) {
+
+    DLLNode<T>* curr = head;
+    
+    for (int i = 0; i < index; i++) {
+        curr = curr->next;
+    }
+
+    return curr;
+}
+
+template<class T>
+int DLList<T>::getSize() const{
+    
+
+    int count = 0;
+    DLLNode<T>* curr;
+
+    for (curr = head; curr != nullptr; curr = curr->next) {
+        count++;
+    }
+
+    return count;
+}
+
 //non memeber functions
 template<class T>
 int replaceVal(DLList<T>& list, T f, T r) {
@@ -503,7 +532,7 @@ void DllListFillRandomInt(DLList<T>& list) {
     srand(time(0));
 
     //adding ran varaibles to tail
-    for (int i = 0; i <= 15; i++) {
+    for (int i = 0; i <= 10; i++) {
         list.add_to_tail((rand() % 10)- 3);
     }
 
@@ -516,3 +545,4 @@ void DllListFillRandomInt(DLList<T>& list) {
     //for testing purposes
     //list.add_to_tail(-1);
 }
+

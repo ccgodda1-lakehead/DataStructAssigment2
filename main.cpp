@@ -37,5 +37,12 @@ int main() {
 
 	cout << "Removing dups of 5: " << mainDLL << endl;
 
+	//getting random variable
+	srand(time(0));
+
+	int ranIndex = rand() % mainDLL.getSize();
+
+	cout << "getting variable at index " << ranIndex << ": [" << mainDLL.get_at(ranIndex)->get_val() << "]";
+
 
 }
