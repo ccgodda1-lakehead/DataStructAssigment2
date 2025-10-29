@@ -61,6 +61,7 @@ public:
     
     //added methods
     DLList rmv_ret_negative();
+    void RemoveAllDuplicatesOf(T& x);
 
 private:
     DLLNode<T>* head;
@@ -367,7 +368,7 @@ DLList<T> DLList<T>::rmv_ret_negative() {
 
         }
         else {
-            std::cout << "not Removed" << std::endl;
+            //std::cout << "not Removed" << std::endl;
 
 
             curr = curr->get_next();
@@ -375,6 +376,73 @@ DLList<T> DLList<T>::rmv_ret_negative() {
     }
 
     return negList;
+
+}
+
+template <class T>
+void DLList <T>::RemoveAllDuplicatesOf(T& x) {
+
+    bool foundFirst = false;
+    DLLNode<T>* curr = head;
+
+
+    while (curr != nullptr) {
+        if (curr->val == x) {
+            switch (foundFirst) {
+            case true:
+            {
+                //this means it's been found before and needs to be removed
+                //important that it can never be the head, so you do not need to check for that
+                bool Changed = false;
+
+                if (curr == tail) {
+                    //std::cout << "removed tail" << std::endl;
+
+                    DLLNode<T>* newCurr = curr->get_next();
+                    remove_tail();
+
+                    curr = newCurr;
+
+                    Changed = true;
+                }
+
+
+                if (Changed == false) {
+                    //std::cout << "removed middle" << std::endl;
+
+
+                    DLLNode<T>* pred = curr->prev;
+                    DLLNode<T>* succ = curr->next;
+                    pred->next = succ;
+                    succ->prev = pred;
+
+                    DLLNode<T>* newCurr = curr->get_next();
+
+                    delete curr;
+
+                    curr = newCurr;
+                }
+
+            }
+                    break;
+            case false:
+            {
+                //this mean this is the first occurance and can affectivally be ignored
+                foundFirst = true;
+
+                curr = curr->get_next();
+            }
+                    break;
+            }
+      
+        }
+        else {
+
+            curr = curr->get_next();
+
+        }
+    }
+
 
 }
 
@@ -425,7 +493,9 @@ int replaceVal(DLList<T>& list, T f, T r) {
 }
 
 
+
 //I used this method to create a random mainDll list for testing
+//allows me to easily change the length of the list, or the range of the ints filling it
 template <class T>
 void DllListFillRandomInt(DLList<T>& list) {
 
@@ -433,12 +503,15 @@ void DllListFillRandomInt(DLList<T>& list) {
     srand(time(0));
 
     //adding ran varaibles to tail
-    for (int i = 0; i <= 10; i++) {
+    for (int i = 0; i <= 15; i++) {
         list.add_to_tail((rand() % 10)- 3);
     }
 
     //adding ones to make sure certain test functions run
     list.add_to_head(0);
+
+    list.add_to_tail(5);
+    list.add_to_tail(5);
 
     //for testing purposes
     //list.add_to_tail(-1);

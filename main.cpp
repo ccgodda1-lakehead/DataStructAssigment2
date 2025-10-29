@@ -31,4 +31,11 @@ int main() {
 
 	cout << "Changed List: " << mainDLL << endl;
 
+	int remove = 5;
+
+	mainDLL.RemoveAllDuplicatesOf(remove);
+
+	cout << "Removing dups of 5: " << mainDLL << endl;
+
+
 }
