@@ -60,4 +60,13 @@ int main() {
 
 
 	//stack testing here.
+
+	//need to make sure we're adding things smaller then the min before it
+	//and larger
+
+
+
+
+	
+
 }
