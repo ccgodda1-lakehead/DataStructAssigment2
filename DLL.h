@@ -4,7 +4,6 @@
 using std::string;
 using std::ostream;
 
-
 template <class T>
 class DLList;
 
@@ -59,6 +58,15 @@ public:
 
     bool contains(const T& val) const;
     DLList& operator=(DLList other);
+    
+    //added methods
+    DLList rmv_ret_negative();
+    void RemoveAllDuplicatesOf(T& x);
+    DLLNode<T>* get_at(int index);
+    bool insert_before(int index, T& x);
+
+
+    int getSize() const;
 
  
 
@@ -265,8 +273,8 @@ void DLList<T>::append(const DLList& other)
 template <class T>
 DLList<T>& DLList<T>::operator=(DLList<T> other)
 {
-    swap(head, other.head);
-    swap(tail, other.tail);
+    std::swap(head, other.head);
+    std::swap(tail, other.tail);
 
     return *this;
 }
@@ -286,3 +294,315 @@ ostream& operator<<(ostream& out, const DLList<T>& list) {
 
     return out;
 }
+
+
+//memeber functions
+template <class T>
+DLList<T> DLList<T>::rmv_ret_negative() {
+
+    /*
+    * Similar to replaceVal, create another list. look through list, if curr < 0
+    * put it in neg array and delete.
+    * 
+    * 
+    * Errors
+    * 
+    * for some reason removing the tail does not work
+    * so if the last one in the list is a negative it will fail
+    * 
+    * also if used with the replace value thing it also fails
+    * 
+    * (Exception thrown: read access violation.
+        pred was 0xFFFFFFFFFFFFFFF71), line 338
+    * 
+    * Similar error to last one, since I orginally set it up to always have the head be
+    * 0 which is then replaced with a neg.. head will always be negative 1
+    * 
+    * so the replacing head, and tail methods don't work...
+    * 
+    * it's trying to remove it twice because I forgot to add the movement into the head/tail removal
+    * 
+    */
+
+    DLLNode<T>* curr = head;
+    DLList<T> negList;
+
+    while (curr != nullptr) {
+        if (curr->val < 0) {
+
+            negList.add_to_tail(curr->val);
+
+            bool Changed = false;;
+
+            if (curr == head) {
+                //std::cout << "removed head" << std::endl;
+
+                DLLNode<T>* newCurr = curr->get_next();
+
+                remove_head();
+
+                curr = newCurr;
+                Changed = true;
+            }
+
+            if (curr == tail) {
+                //std::cout << "removed tail" << std::endl;
+
+                DLLNode<T>* newCurr = curr->get_next();
+
+                remove_tail();
+
+                curr = newCurr;
+
+                Changed = true;
+            }
+
+            if (Changed == false) {
+                //std::cout << "removed middle" << std::endl;
+
+
+                DLLNode<T>* pred = curr->prev;
+                DLLNode<T>* succ = curr->next;
+                pred->next = succ;
+                succ->prev = pred;
+
+                DLLNode<T>* newCurr = curr->get_next();
+
+                delete curr;
+
+                curr = newCurr;
+            }
+
+        }
+        else {
+            //std::cout << "not Removed" << std::endl;
+
+
+            curr = curr->get_next();
+        }
+    }
+
+    return negList;
+
+}
+
+template <class T>
+void DLList <T>::RemoveAllDuplicatesOf(T& x) {
+
+    bool foundFirst = false;
+    DLLNode<T>* curr = head;
+
+
+    while (curr != nullptr) {
+        if (curr->val == x) {
+            switch (foundFirst) {
+            case true:
+            {
+                //this means it's been found before and needs to be removed
+                //important that it can never be the head, so you do not need to check for that
+                bool Changed = false;
+
+                if (curr == tail) {
+                    //std::cout << "removed tail" << std::endl;
+
+                    DLLNode<T>* newCurr = curr->get_next();
+                    remove_tail();
+
+                    curr = newCurr;
+
+                    Changed = true;
+                }
+
+
+                if (Changed == false) {
+                    //std::cout << "removed middle" << std::endl;
+
+
+                    DLLNode<T>* pred = curr->prev;
+                    DLLNode<T>* succ = curr->next;
+                    pred->next = succ;
+                    succ->prev = pred;
+
+                    DLLNode<T>* newCurr = curr->get_next();
+
+                    delete curr;
+
+                    curr = newCurr;
+                }
+
+            }
+                    break;
+            case false:
+            {
+                //this mean this is the first occurance and can affectivally be ignored
+                foundFirst = true;
+
+                curr = curr->get_next();
+            }
+                    break;
+            }
+      
+        }
+        else {
+
+            curr = curr->get_next();
+
+        }
+    }
+
+
+}
+
+template<class T>
+DLLNode<T>* DLList<T>::get_at(int index) {
+
+    DLLNode<T>* curr = head;
+    
+    for (int i = 0; i < index; i++) {
+        curr = curr->next;
+    }
+
+    return curr;
+}
+
+template<class T>
+int DLList<T>::getSize() const{
+    
+
+    int count = 0;
+    DLLNode<T>* curr;
+
+    for (curr = head; curr != nullptr; curr = curr->next) {
+        count++;
+    }
+
+    return count;
+}
+
+template<class T>
+bool DLList<T>::insert_before(int index, T& x) {
+
+    DLLNode<T>* beforeNode = this->get_at(index);
+
+    if (is_empty()){
+        //can add before a variable if non of them exisist
+        return false;
+
+    }
+      
+
+    if (index == 0) {
+        this->add_to_head(x);
+
+        return true;
+    }
+    else {
+        /*
+         1 <-> 2 <-> 3
+         to 
+         1 <-> new <-> 2 <-> 3
+
+         if beforeNode is two
+
+         new.prev = 2.prev
+
+         new.next = 2
+         
+         1.next = new
+
+         2.prev = new
+
+
+
+        */
+
+        // 1 <- new -> 2 
+        //const is (val, ->, <-), or (val, next, prev)
+        DLLNode<T>* new_node = new DLLNode<T>(x, beforeNode, beforeNode->get_prev());
+
+        DLLNode<T>* beforebeforeNode = beforeNode->prev;
+
+        // 1 -> new
+        beforebeforeNode->next = new_node;
+
+        // new <- 2
+        beforeNode->prev = new_node;
+
+       
+
+        return true;
+    }
+
+}
+
+//non memeber functions
+template<class T>
+int replaceVal(DLList<T>& list, T f, T r) {
+
+    
+    DLLNode<T>* curr;
+    DLList<T> newList;
+    int count = 0;
+
+    for (curr = list.head_node(); curr != nullptr; curr = curr->get_next()) {
+        if (curr->get_val() == f) {
+
+
+            /*
+            need to set the curr node to the newnode via a replace, since it is a non memeber
+            function it can not do that directly....
+
+            add a replace function? could work but also idk if that's what teach is expecting
+            set the pointer of curr to new node, tried didn't work I may just be dumb and doign it wrong
+
+            maybe like.. remove curr from the DLLlist and add new, it would techincally work
+            but it wouldn't really add at the same place..
+
+            can create a whole other copy of the DLL and start copying it over but when you reach a curr
+            you do an r instead.
+
+
+            dont need this anymore
+            DLLNode<T> newNode(r, curr->get_next(), curr->get_prev());
+
+            */
+            newList.add_to_tail(r);
+            
+            count++;
+
+        }
+        else {
+            newList.add_to_tail(curr->get_val());
+        }
+    }
+
+    list = newList;
+
+    return count;
+}
+
+
+
+//I used this method to create a random mainDll list for testing
+//allows me to easily change the length of the list, or the range of the ints filling it
+template <class T>
+void DllListFillRandomInt(DLList<T>& list) {
+
+    //makes it truely random
+    srand(time(0));
+
+    //adding ran varaibles to tail
+    for (int i = 0; i <= 10; i++) {
+        list.add_to_tail((rand() % 10)- 3);
+    }
+
+    //adding ones to make sure certain test functions run
+    list.add_to_head(0);
+
+    list.add_to_tail(5);
+    list.add_to_tail(5);
+
+    //for testing purposes
+    //list.add_to_tail(-1);
+}
+
