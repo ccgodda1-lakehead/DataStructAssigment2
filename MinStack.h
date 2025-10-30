@@ -9,9 +9,9 @@ public:
     MinStack(const MinStack& other);
     ~MinStack();
 
-    void push(const T& val);
-    T pop();
-    T top() const;
+    void push(const int& val);
+    int pop();
+    int top() const;
 
     bool is_empty() const;
     bool is_full() const;
@@ -20,25 +20,25 @@ public:
     MinStack& operator=(MinStack other);
 
 private:
-    T* data;
+    int* data;
     int capacity;
     int last;
 };
 
 
-template <class T>
-MinStack<T>::MinStack(int cap)
+
+MinStack::MinStack(int cap)
 {
     if (cap <= 0)
         throw string("ERROR: Invalid capacity!");
 
     capacity = cap;
-    data = new T[capacity];
+    data = new int[capacity];
     last = -1;
 }
 
-template <class T>
-MinStack<T>& MinStack<T>::operator=(MinStack<T> other) {
+
+MinStack& MinStack::operator=(MinStack other) {
     swap(data, other.data);
     swap(capacity, other.capacity);
     swap(last, other.last);
@@ -46,24 +46,24 @@ MinStack<T>& MinStack<T>::operator=(MinStack<T> other) {
     return *this;
 }
 
-template <class T>
-MinStack<T>::MinStack(const MinStack<T>& other) {
+
+MinStack::MinStack(const MinStack& other) {
     capacity = other.capacity;
-    data = new T[capacity];
+    data = new int[capacity];
 
     last = other.last;
     for (int i = 0; i <= last; i++)
         data[i] = other.data[i];
 }
 
-template <class T>
-MinStack<T>::~MinStack()
+
+MinStack::~MinStack()
 {
     delete[] data;
 }
 
-template <class T>
-void MinStack<T>::push(const T& val)
+
+void MinStack::push(const int& val)
 {
     if (is_full())
         throw string("ERROR: Stack overflow!");
@@ -72,19 +72,19 @@ void MinStack<T>::push(const T& val)
     data[last] = val;
 }
 
-template <class T>
-T MinStack<T>::pop()
+
+int MinStack::pop()
 {
     if (is_empty())
         throw string("ERROR: Stack underflow!");
 
-    T val = data[last];
+    int val = data[last];
     --last;
     return val;
 }
 
-template <class T>
-T MinStack<T>::top() const
+
+int MinStack::top() const
 {
     if (is_empty())
         throw string("ERROR: Attempting to retrieve an element from an empty stack!");
@@ -92,20 +92,19 @@ T MinStack<T>::top() const
     return data[last];
 }
 
-template <class T>
-bool MinStack<T>::is_empty() const
+
+bool MinStack::is_empty() const
 {
     return last == -1;
 }
 
-template <class T>
-bool MinStack<T>::is_full() const
+
+bool MinStack::is_full() const
 {
     return last == capacity - 1;
 }
 
-template <class T>
-void MinStack<T>::clear()
+void MinStack::clear()
 {
     last = -1;
 }

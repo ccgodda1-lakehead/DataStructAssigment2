@@ -6,7 +6,7 @@ Carson Carolyn Goddard
 */
 #include <iostream>
 #include "DLL.h"
-#include "StackArray.h"
+#include "MinStack.h"
 
 using namespace std;
 
