@@ -2,13 +2,12 @@
 
 // A Stack class based on an array implementation
 // This is a bounded stack (has a fixed size).
-template <class T>
-class StackArray
+class MinStack
 {
 public:
-    StackArray(int cap);
-    StackArray(const StackArray& other);
-    ~StackArray();
+    MinStack(int cap);
+    MinStack(const MinStack& other);
+    ~MinStack();
 
     void push(const T& val);
     T pop();
@@ -18,7 +17,7 @@ public:
     bool is_full() const;
 
     void clear();
-    StackArray& operator=(StackArray other);
+    MinStack& operator=(MinStack other);
 
 private:
     T* data;
@@ -28,7 +27,7 @@ private:
 
 
 template <class T>
-StackArray<T>::StackArray(int cap)
+MinStack<T>::MinStack(int cap)
 {
     if (cap <= 0)
         throw string("ERROR: Invalid capacity!");
@@ -39,7 +38,7 @@ StackArray<T>::StackArray(int cap)
 }
 
 template <class T>
-StackArray<T>& StackArray<T>::operator=(StackArray<T> other) {
+MinStack<T>& MinStack<T>::operator=(MinStack<T> other) {
     swap(data, other.data);
     swap(capacity, other.capacity);
     swap(last, other.last);
@@ -48,7 +47,7 @@ StackArray<T>& StackArray<T>::operator=(StackArray<T> other) {
 }
 
 template <class T>
-StackArray<T>::StackArray(const StackArray<T>& other) {
+MinStack<T>::MinStack(const MinStack<T>& other) {
     capacity = other.capacity;
     data = new T[capacity];
 
@@ -58,13 +57,13 @@ StackArray<T>::StackArray(const StackArray<T>& other) {
 }
 
 template <class T>
-StackArray<T>::~StackArray()
+MinStack<T>::~MinStack()
 {
     delete[] data;
 }
 
 template <class T>
-void StackArray<T>::push(const T& val)
+void MinStack<T>::push(const T& val)
 {
     if (is_full())
         throw string("ERROR: Stack overflow!");
@@ -74,7 +73,7 @@ void StackArray<T>::push(const T& val)
 }
 
 template <class T>
-T StackArray<T>::pop()
+T MinStack<T>::pop()
 {
     if (is_empty())
         throw string("ERROR: Stack underflow!");
@@ -85,7 +84,7 @@ T StackArray<T>::pop()
 }
 
 template <class T>
-T StackArray<T>::top() const
+T MinStack<T>::top() const
 {
     if (is_empty())
         throw string("ERROR: Attempting to retrieve an element from an empty stack!");
@@ -94,19 +93,19 @@ T StackArray<T>::top() const
 }
 
 template <class T>
-bool StackArray<T>::is_empty() const
+bool MinStack<T>::is_empty() const
 {
     return last == -1;
 }
 
 template <class T>
-bool StackArray<T>::is_full() const
+bool MinStack<T>::is_full() const
 {
     return last == capacity - 1;
 }
 
 template <class T>
-void StackArray<T>::clear()
+void MinStack<T>::clear()
 {
     last = -1;
 }
