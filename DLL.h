@@ -60,12 +60,7 @@ public:
     bool contains(const T& val) const;
     DLList& operator=(DLList other);
 
-    //new functions
-    int replaceVal(DLList<T>& list, T f, T r);
-    DLList rmv_ret_negative();
-    void RemoveAllDuplicatesOf(T& x);
-    DLLNode<T> get_at(int index);
-    bool insert_before(int index, T& x);
+ 
 
 private:
     DLLNode<T>* head;
