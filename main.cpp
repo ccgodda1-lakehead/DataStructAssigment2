@@ -64,8 +64,13 @@ int main() {
 	//need to make sure we're adding things smaller then the min before it
 	//and larger
 
+	MinStack testMin(5);
 
+	testMin.push(6); // S6
 
+	testMin.push(4); // S4 6
+
+	testMin.push(8); // 8 S4 6
 
 	
 
